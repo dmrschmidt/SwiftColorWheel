@@ -11,7 +11,7 @@ class MyViewController : UIViewController, ColorWheelDelegate {
         let colorWheelPos = CGRect(x: 50, y: 50, width: 300, height: 300)
         colorWheel = ColorWheel(frame: colorWheelPos)
         colorWheel.delegate = self
-        colorWheel.backgroundColor = .black
+        colorWheel.backgroundColor = .darkGray
         view.addSubview(colorWheel)
         
         let slider = UISlider(frame: CGRect(x: 50, y: 360, width: 300, height: 30))
@@ -26,6 +26,9 @@ class MyViewController : UIViewController, ColorWheelDelegate {
     }
     
     @objc func sliderChanged(sender: UISlider) {
+        colorWheel.frame = CGRect(x: 50.0, y: 50.0,
+                                  width: Double(300 * sender.value),
+                                  height: Double(300 * sender.value))
         colorWheel.brightness = CGFloat(sender.value)
     }
 }
@@ -72,7 +75,9 @@ public class ColorWheel: UIView {
         didSet { updateBrightness() }
     }
     
-    private var maxCircleRadius: CGFloat = 15.0
+    private var centerRadius: CGFloat = 8.0
+    private var minCircleRadius: CGFloat = 1.0
+    private var maxCircleRadius: CGFloat = 6.0
     private var tapRecognizer: UITapGestureRecognizer!
     
     public required init?(coder aDecoder: NSCoder) {
@@ -89,16 +94,42 @@ public class ColorWheel: UIView {
     
     public override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
+        let steps = arcSteps(in: rect)
         
         context.saveGState()
-        (0...100).filter { $0 % 10 == 0 }.forEach { dist in
-            (0..<360).filter { $0 % 10 == 0 }.forEach { deg in
-                let distance = 1 - sin(CGFloat(dist) / 100 * .pi / 3)
+        
+        let outerRadius = radius(in: rect)
+        var innerRadius = radius(in: rect)
+        repeat {
+            let innerPadding: CGFloat = 1
+            let distance = innerRadius / outerRadius//1 - sin(CGFloat(innerRadius / outerRadius) * .pi / 3)
+            let currentRadius = radius(deg: 0, distance: distance)
+            
+            print("distance: \(distance)")
+
+            steps.forEach { deg in
                 drawCircle(in: rect, of: context, deg: CGFloat(deg), distance: distance)
             }
-        }
+            
+            innerRadius -= (currentRadius + innerPadding)
+        } while innerRadius > 0
+        
+//        (0...100).filter { $0 % 10 == 0 }.forEach { dist in
+//            steps.forEach { deg in
+//                let distance = 1 - sin(CGFloat(dist) / 100 * .pi / 3)
+//                drawCircle(in: rect, of: context, deg: CGFloat(deg), distance: distance)
+//            }
+//        }
         drawCircle(in: rect, of: context, deg: 0, distance: 0)
         context.restoreGState()
+    }
+    
+    private func arcSteps(in rect: CGRect) -> [Double] {
+//        let circumflex = 2 * .pi * radius(in: rect)
+        let stepsCount = max(1, Int(((1.0 - 0.00) * .pi / (asin(12 / radius(in: rect))) + 0.5)))
+//        let stepsCount: Int = Int(floor(circumflex / (3 * maxCircleRadius + 2)))
+        let stepSize = round(360.0 / Double(stepsCount))
+        return (0..<(stepsCount )).enumerated().map { Double($0.0) * stepSize }
     }
     
     func updateBrightness() {
@@ -155,7 +186,11 @@ public class ColorWheel: UIView {
 
 fileprivate extension ColorWheel {
     var radius: CGFloat {
-        return min(bounds.size.width, bounds.size.height) / 2 - padding
+        return radius(in: bounds)
+    }
+    
+    func radius(in rect: CGRect) -> CGFloat {
+        return min(rect.size.width, rect.size.height) / 2 - padding
     }
     
     var wheelCenter: CGPoint {
@@ -176,8 +211,8 @@ fileprivate extension ColorWheel {
     }
     
     func radius(deg: CGFloat, distance: CGFloat) -> CGFloat {
-        guard distance > 0 else { return 4 * 4 }
-        return max(4, maxCircleRadius * sin(distance))
+        guard distance > 0 else { return centerRadius }
+        return max(minCircleRadius, maxCircleRadius * sin(distance))
     }
     
     func position(in rect: CGRect, deg: CGFloat, distance: CGFloat, circleRadius: CGFloat) -> CGPoint {
