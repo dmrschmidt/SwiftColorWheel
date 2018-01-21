@@ -26,6 +26,7 @@ class MyViewController : UIViewController, ColorWheelDelegate {
     }
     
     @objc func sliderChanged(sender: UISlider) {
+        print("slider: \(sender.value)")
         colorWheel.frame = CGRect(x: 50.0, y: 50.0,
                                   width: Double(300 * sender.value),
                                   height: Double(300 * sender.value))
@@ -75,7 +76,7 @@ public class ColorWheel: UIView {
         didSet { updateBrightness() }
     }
     
-    private var centerRadius: CGFloat = 8.0
+    private var centerRadius: CGFloat = 4.0
     private var minCircleRadius: CGFloat = 1.0
     private var maxCircleRadius: CGFloat = 6.0
     private var tapRecognizer: UITapGestureRecognizer!
@@ -94,42 +95,40 @@ public class ColorWheel: UIView {
     
     public override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        let steps = arcSteps(in: rect)
         
         context.saveGState()
         
         let outerRadius = radius(in: rect)
-        var innerRadius = radius(in: rect)
+        var innerRadius = outerRadius
+        var oldRadius = radius(deg: 0, distance: 1)
         repeat {
             let innerPadding: CGFloat = 1
-            let distance = innerRadius / outerRadius//1 - sin(CGFloat(innerRadius / outerRadius) * .pi / 3)
+            let distance = innerRadius / outerRadius
             let currentRadius = radius(deg: 0, distance: distance)
             
-            print("distance: \(distance)")
-
+            let steps = arcSteps(circleRadius: currentRadius, on: innerRadius)
             steps.forEach { deg in
                 drawCircle(in: rect, of: context, deg: CGFloat(deg), distance: distance)
             }
             
-            innerRadius -= (currentRadius + innerPadding)
-        } while innerRadius > 0
+            innerRadius -= (oldRadius + 2 * currentRadius + innerPadding)
+            oldRadius = innerRadius
+            oldRadius = currentRadius
+        } while innerRadius > centerRadius
         
-//        (0...100).filter { $0 % 10 == 0 }.forEach { dist in
-//            steps.forEach { deg in
-//                let distance = 1 - sin(CGFloat(dist) / 100 * .pi / 3)
-//                drawCircle(in: rect, of: context, deg: CGFloat(deg), distance: distance)
-//            }
-//        }
         drawCircle(in: rect, of: context, deg: 0, distance: 0)
         context.restoreGState()
     }
     
-    private func arcSteps(in rect: CGRect) -> [Double] {
-//        let circumflex = 2 * .pi * radius(in: rect)
-        let stepsCount = max(1, Int(((1.0 - 0.00) * .pi / (asin(12 / radius(in: rect))) + 0.5)))
-//        let stepsCount: Int = Int(floor(circumflex / (3 * maxCircleRadius + 2)))
-        let stepSize = round(360.0 / Double(stepsCount))
-        return (0..<(stepsCount )).enumerated().map { Double($0.0) * stepSize }
+    private func arcSteps(circleRadius: CGFloat, on radius: CGFloat) -> [Double] {
+        let stepsCount = (2 * circleRadius) > radius ? 1 :
+            max(1, Int(((1.0 - 0.00) * .pi / (asin((2 * circleRadius) / radius)))))
+        let stepSize = 360.0 / Double(stepsCount - 1)
+        var steps = [Double]()
+        repeat {
+            steps.append((steps.last ?? 0) + stepSize)
+        } while steps.count < stepsCount
+        return steps
     }
     
     func updateBrightness() {
@@ -212,12 +211,12 @@ fileprivate extension ColorWheel {
     
     func radius(deg: CGFloat, distance: CGFloat) -> CGFloat {
         guard distance > 0 else { return centerRadius }
-        return max(minCircleRadius, maxCircleRadius * sin(distance))
+        return max(minCircleRadius, maxCircleRadius * distance)
     }
     
     func position(in rect: CGRect, deg: CGFloat, distance: CGFloat, circleRadius: CGFloat) -> CGPoint {
         let center = CGPoint(x: rect.size.width / 2, y: rect.size.height / 2)
-        let rad = (deg + distance * 45) / 180 * .pi
+        let rad = (deg + 40 * distance) / 180 * .pi
         let x = center.x + (radius - padding) * distance * cos(-rad)
         let y = center.y + (radius - padding) * distance * sin(-rad)
         return CGPoint(x: x, y: y)
