@@ -40,8 +40,8 @@ public protocol ColorWheelDelegate: class {
 public class RotatingColorWheel: ColorWheel {
     private var rotateRecognizer: UIRotationGestureRecognizer!
     private var panRecognizer: UIPanGestureRecognizer!
-    private var originalRotation: CGFloat = 0
-    private var lastAngle: CGFloat = 0
+    private var originalRotation: CGFloat = 2 * .pi
+    private var lastAngle: CGFloat = 2 * .pi
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -96,16 +96,14 @@ public class RotatingColorWheel: ColorWheel {
         }
         return rotation
     }
-
+    
     @objc func didPan(recognizer: UIPanGestureRecognizer) {
         let touchPoint = recognizer.location(in: superview!)
-        let distance = normalizedDistance(to: touchPoint)
-        guard distance <= 1.0 else { return }
-        
         let center = convert(wheelCenter, to: superview!)
         let angle = angleTo(center: center, pointOnCircle: touchPoint)
         
         let newRotation = originalRotation + angleDelta(angle, lastAngle)
+        
         if recognizer.state == .began {
             lastAngle = angle
         } else if recognizer.state == .changed {
@@ -114,12 +112,34 @@ public class RotatingColorWheel: ColorWheel {
             originalRotation = newRotation
         } else if recognizer.state == .ended {
             originalRotation = newRotation
+            snapBackIfSpunOutOfRange()
+        } else if recognizer.state == .cancelled {
+            snapBackIfSpunOutOfRange()
         }
+    }
+    
+    func isOutOfSpinRange() -> Bool {
+        return originalRotation < 0 || originalRotation > 2 * .pi
+    }
+    
+    func snapBackIfSpunOutOfRange() {
+        guard isOutOfSpinRange() else { return }
+        
+        let targetAngle: CGFloat = originalRotation < 0 ? 0 : 2 * .pi
+        let spring = CASpringAnimation(keyPath: "transform")
+        spring.damping = 20
+        spring.stiffness = 1000
+        spring.fromValue = NSValue(caTransform3D: layer.transform)
+        spring.toValue = NSValue(caTransform3D: CATransform3DRotate(CATransform3DIdentity, targetAngle, 0, 0, 0))
+        spring.duration = spring.settlingDuration
+        layer.transform = CATransform3DRotate(CATransform3DIdentity, targetAngle, 0, 0, 0)
+        layer.add(spring, forKey: "transformAnimation")
+        originalRotation = targetAngle
     }
     
     func rotate(to radians: CGFloat) {
         transform = CGAffineTransform(rotationAngle: radians)
-        //        brightness = newRotation / (2 * .pi)
+        brightness = radians / (2 * .pi)
     }
     
     private func prepareRotationRecognizers() {
@@ -129,6 +149,15 @@ public class RotatingColorWheel: ColorWheel {
                                                action: #selector(didPan(recognizer:)))
         addGestureRecognizer(rotateRecognizer)
         addGestureRecognizer(panRecognizer)
+        panRecognizer.delegate = self
+    }
+}
+
+extension RotatingColorWheel: UIGestureRecognizerDelegate {
+    public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let touchPoint = gestureRecognizer.location(in: self)
+        let distance = normalizedDistance(to: touchPoint)
+        return distance <= 1.0 && layer.animation(forKey: "transformAnimation") == nil
     }
 }
 
