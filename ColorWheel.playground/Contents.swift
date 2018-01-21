@@ -148,28 +148,18 @@ public class ColorWheel: UIView {
         
         guard normalizedDistance <= 1.0 else { return }
         
-        // TODO: convert to rad
-        let angle = angleToPoint(center: wheelCenter, pointOnCircle: touchPoint)
+        let angle = adjustedAngleTo(center: wheelCenter, pointOnCircle: touchPoint, distance: normalizedDistance)
         let tappedColor = color(rad: angle, distance: normalizedDistance)
         delegate?.didSelect(color: tappedColor)
     }
     
-    func adjustedAngleToPoint(center: CGPoint, pointOnCircle: CGPoint, distance: CGFloat) -> CGFloat {
-        return -180 * acos(pointOnCircle.x / (center.x + distance * radius(in: bounds))) - 45 * distance * .pi
-    }
-    
-    func angleToPoint(center: CGPoint, pointOnCircle: CGPoint) -> CGFloat {
+    func adjustedAngleTo(center: CGPoint, pointOnCircle: CGPoint, distance: CGFloat) -> CGFloat {
         let originX = pointOnCircle.x - center.x
         let originY = pointOnCircle.y - center.y
-        var radians = atan2(originY, originX) - .pi / 4
-        
-        while radians < 0 {
-            radians += CGFloat(2 * Double.pi)
-        }
-        
-        print("degree: \((radians + .pi) * 180 / .pi)")
-        
-        return (radians + .pi) * 180 / .pi
+        var radians = atan2(originY, originX) + (shiftDegree * distance) / 180 * .pi
+        while radians < 0 { radians += CGFloat(2 * Double.pi) }
+        let counterClockwiseRadians = 2 * .pi - radians
+        return counterClockwiseRadians
     }
 }
 
