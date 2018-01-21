@@ -80,6 +80,23 @@ public class RotatingColorWheel: ColorWheel {
         }
     }
     
+    func dampened(rotation: CGFloat) -> CGFloat {
+        if rotation < 0 {
+            let minValue: CGFloat = -(.pi)
+            let undampenedDelta = max(minValue, rotation)
+            let progress = abs(undampenedDelta / .pi)
+            let dampenedProgress = sin(sqrt(progress) * (.pi / 2))
+            return dampenedProgress * (-(.pi / 8))
+        } else if rotation > 2 * .pi {
+            let maxValue: CGFloat = 2 * .pi + .pi
+            let undampenedDelta = min(maxValue, rotation) - 2 * .pi
+            let progress = undampenedDelta / .pi
+            let dampenedProgress = sin(sqrt(progress) * (.pi / 2))
+            return 2 * .pi + dampenedProgress * (.pi / 8)
+        }
+        return rotation
+    }
+
     @objc func didPan(recognizer: UIPanGestureRecognizer) {
         let touchPoint = recognizer.location(in: superview!)
         let distance = normalizedDistance(to: touchPoint)
@@ -92,7 +109,7 @@ public class RotatingColorWheel: ColorWheel {
         if recognizer.state == .began {
             lastAngle = angle
         } else if recognizer.state == .changed {
-            rotate(to: newRotation)
+            rotate(to: dampened(rotation: newRotation))
             lastAngle = angle
             originalRotation = newRotation
         } else if recognizer.state == .ended {
