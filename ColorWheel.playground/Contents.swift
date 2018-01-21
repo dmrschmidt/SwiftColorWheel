@@ -139,7 +139,9 @@ public class RotatingColorWheel: ColorWheel {
     
     func rotate(to radians: CGFloat) {
         transform = CGAffineTransform(rotationAngle: radians)
-        brightness = radians / (2 * .pi)
+        let mappedBrightness = radians / (2 * .pi)
+        guard mappedBrightness >= 0 && mappedBrightness <= 1.0 else { return }
+        brightness = mappedBrightness
     }
     
     private func prepareRotationRecognizers() {
