@@ -40,8 +40,8 @@ public protocol ColorWheelDelegate: class {
 public class RotatingColorWheel: ColorWheel {
     private var rotateRecognizer: UIRotationGestureRecognizer!
     private var panRecognizer: UIPanGestureRecognizer!
-    private var originalRotation: CGFloat = 2 * .pi
-    private var lastAngle: CGFloat = 2 * .pi
+    private var originalRotation: CGFloat = 0
+    private var lastAngle: CGFloat = 0
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -63,7 +63,7 @@ public class RotatingColorWheel: ColorWheel {
     }
     
     func angleDelta(_ newAngle: CGFloat, _ oldAngle: CGFloat) -> CGFloat {
-        return abs(newAngle - oldAngle) * movementDirection(newAngle, oldAngle)
+        return abs((abs(newAngle) - abs(oldAngle))) * movementDirection(newAngle, oldAngle)
     }
     
     func movementDirection(_ newAngle: CGFloat, _ oldAngle: CGFloat) -> CGFloat {
