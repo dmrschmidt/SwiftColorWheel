@@ -2,14 +2,14 @@ import UIKit
 import PlaygroundSupport
 
 class MyViewController : UIViewController, ColorWheelDelegate {
-    private var colorWheel: ColorWheel!
+    private var colorWheel: RotatingColorWheel!
     
     override func loadView() {
         let view = UIView()
         view.backgroundColor = .white
         
         let colorWheelPos = CGRect(x: 50, y: 50, width: 300, height: 300)
-        colorWheel = ColorWheel(frame: colorWheelPos)
+        colorWheel = RotatingColorWheel(frame: colorWheelPos)
         colorWheel.delegate = self
         colorWheel.backgroundColor = .darkGray
         view.addSubview(colorWheel)
@@ -39,45 +39,108 @@ public protocol ColorWheelDelegate: class {
 
 public class RotatingColorWheel: ColorWheel {
     private var rotateRecognizer: UIRotationGestureRecognizer!
+    private var panRecognizer: UIPanGestureRecognizer!
     private var originalRotation: CGFloat = 2 * .pi
+    private var lastAngle: CGFloat = 2 * .pi
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        prepareRotationRecognizer()
+        prepareRotationRecognizers()
     }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        prepareRotationRecognizer()
+        prepareRotationRecognizers()
     }
     
     @objc func didRotate(recognizer: UIRotationGestureRecognizer) {
         let newRotation = max(0, min(2 * .pi, originalRotation + recognizer.rotation))
         if recognizer.state == .changed {
-            transform = CGAffineTransform(rotationAngle: newRotation)
-            brightness = newRotation / (2 * .pi)
+            rotate(to: newRotation)
         } else if recognizer.state == .ended {
             originalRotation = newRotation
         }
     }
     
-    private func prepareRotationRecognizer() {
-        rotateRecognizer = UIRotationGestureRecognizer()
+    func angleDelta(_ newAngle: CGFloat, _ oldAngle: CGFloat) -> CGFloat {
+        return abs(newAngle - oldAngle) * movementDirection(newAngle, oldAngle)
+    }
+    
+    func movementDirection(_ newAngle: CGFloat, _ oldAngle: CGFloat) -> CGFloat {
+        let clockwise: CGFloat = 1
+        let counterClockwise: CGFloat = -1
+        if newAngle < 0 && oldAngle > 0 && abs(newAngle) > .pi / 2 {
+            return clockwise
+        } else if newAngle > 0 && oldAngle < 0 && abs(newAngle) > .pi / 2 {
+            return counterClockwise
+        } else if newAngle > oldAngle {
+            return clockwise
+        } else {
+            return counterClockwise
+        }
+    }
+    
+    @objc func didPan(recognizer: UIPanGestureRecognizer) {
+        let touchPoint = recognizer.location(in: superview!)
+        let distance = normalizedDistance(to: touchPoint)
+        guard distance <= 1.0 else { return }
+        
+        let center = convert(wheelCenter, to: superview!)
+        let angle = angleTo(center: center, pointOnCircle: touchPoint)
+        
+        let newRotation = originalRotation + angleDelta(angle, lastAngle)
+        if recognizer.state == .began {
+            lastAngle = angle
+        } else if recognizer.state == .changed {
+            rotate(to: newRotation)
+            lastAngle = angle
+            originalRotation = newRotation
+        } else if recognizer.state == .ended {
+            originalRotation = newRotation
+        }
+    }
+    
+    func rotate(to radians: CGFloat) {
+        transform = CGAffineTransform(rotationAngle: radians)
+        //        brightness = newRotation / (2 * .pi)
+    }
+    
+    private func prepareRotationRecognizers() {
+        rotateRecognizer = UIRotationGestureRecognizer(target: self,
+                                                       action: #selector(didRotate(recognizer:)))
+        panRecognizer = UIPanGestureRecognizer(target: self,
+                                               action: #selector(didPan(recognizer:)))
         addGestureRecognizer(rotateRecognizer)
-        rotateRecognizer.addTarget(self, action: #selector(didRotate(recognizer:)))
+        addGestureRecognizer(panRecognizer)
     }
 }
 
 public class ColorWheel: UIView {
     public weak var delegate: ColorWheelDelegate?
-    public var padding: CGFloat = 12.0 { didSet { setNeedsDisplay() } }
-    public var brightness: CGFloat = 1.0 { didSet { setNeedsDisplay() } }
-    public var centerRadius: CGFloat = 4.0 { didSet { setNeedsDisplay() } }
-    public var minCircleRadius: CGFloat = 1.0 { didSet { setNeedsDisplay() } }
-    public var maxCircleRadius: CGFloat = 6.0 { didSet { setNeedsDisplay() } }
-    public var innerPadding: CGFloat = 2 { didSet { setNeedsDisplay() } }
-    public var shiftDegree: CGFloat = 40 { didSet { setNeedsDisplay() } }
-    public var density: CGFloat = 0.8 { didSet { setNeedsDisplay() } }
+    public var padding: CGFloat = 12.0 {
+        didSet { setNeedsDisplay() }
+    }
+    public var brightness: CGFloat = 1.0 {
+        didSet { setNeedsDisplay() }
+    }
+    public var centerRadius: CGFloat = 4.0 {
+        didSet { setNeedsDisplay() }
+    }
+    public var minCircleRadius: CGFloat = 1.0 {
+        didSet { setNeedsDisplay() }
+    }
+    public var maxCircleRadius: CGFloat = 6.0 {
+        didSet { setNeedsDisplay() }
+    }
+    public var innerPadding: CGFloat = 2 {
+        didSet { setNeedsDisplay() }
+    }
+    public var shiftDegree: CGFloat = 40 {
+        didSet { setNeedsDisplay() }
+    }
+    public var density: CGFloat = 0.8 {
+        didSet { setNeedsDisplay() }
+    }
     
     private var tapRecognizer: UITapGestureRecognizer!
     
@@ -140,26 +203,33 @@ public class ColorWheel: UIView {
         context.drawPath(using: .fillStroke)
     }
     
+    func normalizedDistance(to touchPoint: CGPoint) -> CGFloat {
+        let distance = sqrt(pow(touchPoint.x - wheelCenter.x, 2) +
+            pow(touchPoint.y - wheelCenter.y, 2))
+        return distance / radius(in: bounds)
+    }
+    
     @objc func didRegisterTap(recognizer: UITapGestureRecognizer) {
         let touchPoint = recognizer.location(in: self)
-        let distance = sqrt(pow(touchPoint.x - wheelCenter.x, 2) + 
-            pow(touchPoint.y - wheelCenter.y, 2))
-        let normalizedDistance = distance / radius(in: bounds)
+        let distance = normalizedDistance(to: touchPoint)
+        guard distance <= 1.0 else { return }
         
-        guard normalizedDistance <= 1.0 else { return }
-        
-        let angle = adjustedAngleTo(center: wheelCenter, pointOnCircle: touchPoint, distance: normalizedDistance)
-        let tappedColor = color(rad: angle, distance: normalizedDistance)
+        let angle = adjustedAngleTo(center: wheelCenter, pointOnCircle: touchPoint, distance: distance)
+        let tappedColor = color(rad: angle, distance: distance)
         delegate?.didSelect(color: tappedColor)
     }
     
-    func adjustedAngleTo(center: CGPoint, pointOnCircle: CGPoint, distance: CGFloat) -> CGFloat {
+    func angleTo(center: CGPoint, pointOnCircle: CGPoint) -> CGFloat {
         let originX = pointOnCircle.x - center.x
         let originY = pointOnCircle.y - center.y
-        var radians = atan2(originY, originX) + (shiftDegree * distance) / 180 * .pi
+        return atan2(originY, originX)
+    }
+    
+    func adjustedAngleTo(center: CGPoint, pointOnCircle: CGPoint, distance: CGFloat) -> CGFloat {
+        var radians = angleTo(center: center, pointOnCircle: pointOnCircle)
         while radians < 0 { radians += CGFloat(2 * Double.pi) }
-        let counterClockwiseRadians = 2 * .pi - radians
-        return counterClockwiseRadians
+        let counterClockwise = 2 * .pi - (radians + (shiftDegree * distance) / 180 * .pi)
+        return counterClockwise
     }
 }
 
