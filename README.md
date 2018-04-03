@@ -10,4 +10,4 @@ You may also find the following iOS controls written in Swift interesting:
 * [QRCode](https://github.com/dmrschmidt/QRCode) - a customizable QR code generator
 
 
-# Installation
+## Installation
