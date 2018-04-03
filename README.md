@@ -4,7 +4,7 @@
 
 A fancy color wheel for iOS in Swift
 
-![Screenshot](https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_1.png)
+<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_1.png" alt="Screenshot" width="150"><img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_2.png" alt="Screenshot" width="150">
 
 # More related iOS Controls
 
@@ -25,3 +25,5 @@ github "dmrschmidt/SwiftColorWheel", ~> 1.0.0
 ```
 
 # Usage
+
+<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_3.png" alt="Screenshot" width="250">
