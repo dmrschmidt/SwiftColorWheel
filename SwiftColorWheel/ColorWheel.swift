@@ -71,7 +71,7 @@ public class ColorWheel: UIView {
         return super.action(for: layer, forKey: event)
     }
 
-    func normalizedDistanceFromCenter(to touchPoint: CGPoint) -> CGFloat {
+    public func normalizedDistanceFromCenter(to touchPoint: CGPoint) -> CGFloat {
         let distance = sqrt(pow(touchPoint.x - wheelCenter.x, 2) + pow(touchPoint.y - wheelCenter.y, 2))
         return distance / wheelLayer.radius(in: bounds)
     }
