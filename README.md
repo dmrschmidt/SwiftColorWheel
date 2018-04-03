@@ -31,7 +31,7 @@ Either, add a `ColorWheel` or `RotatingColorWheel` as a custom `UIView` subclass
 This will already render your color picker. However it doesn't react on your taps yet. For that, set yourself as it's `delegate`. See the very simplified code example below:
 
 ```swift
-class MyViewController: UIViewController {
+class MyViewController: UIViewController, ColorWheelDelegate {
     private var colorWheel: ColorWheel!
     
     override func viewDidLoad() {
@@ -51,5 +51,34 @@ class MyViewController: UIViewController {
 ```
 
 # Customization
+
+You can modify the look of the color wheel through various exposed properties.
+
+```swift
+// Extra padding in points to the view border.
+colorWheel.padding = 13.0
+
+// Radius in point of the central color circle (for black & white shades).
+colorWheel.centerRadius = 5.0
+
+// Smallest circle radius in point.
+colorWheel.minCircleRadius = 1.0
+
+// Largest circle radius in point.
+colorWheel.maxCircleRadius = 5.0
+
+// Padding between circles in point.
+colorWheel.innerPadding = 3
+
+/**
+ Degree by which each row of circles is shifted.
+ A value of 0 results in a straight layout of the inner circles.
+ A value other than 0 results in a slightly shifted, fractal-ish / flower-ish look.
+*/
+colorWheel.shiftDegree = 0
+
+// Overall density of inner circles.
+colorWheel.density = 1.0
+```
 
 <img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_3.png" alt="Screenshot" width="250">
