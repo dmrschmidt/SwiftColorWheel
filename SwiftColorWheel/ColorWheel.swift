@@ -1,19 +1,51 @@
 import UIKit
 
+/**
+ Delegate to the ColorWheel.
+ */
 public protocol ColorWheelDelegate: class {
+    /**
+     If a delegate is set, this method is invoked with the color closed to the
+     user's tap location.
+    */
     func didSelect(color: UIColor)
 }
 
+/**
+ Basic color wheel picker.
+ This class draws a round, wheel-like color picker which can be tapped by the user.
+ The interpolated color closed to the tap location is returned to its `ColorWheelDelegate`.
+ */
 public class ColorWheel: UIView {
+    /// Delegate to inform when color is picked.
     public weak var delegate: ColorWheelDelegate?
 
+    /// Overall color brightness. Animatable.
     @objc public dynamic var brightness: CGFloat { didSet { wheelLayer.brightness = brightness } }
+
+    /// Extra padding in points to the view border.
     public var padding: CGFloat = 12.0 { didSet { setNeedsDisplay() } }
+
+    /// Radius in point of the central color circle (for black & white shades).
     public var centerRadius: CGFloat = 4.0 { didSet { setNeedsDisplay() } }
+
+    /// Smallest circle radius in point.
     public var minCircleRadius: CGFloat = 1.0 { didSet { setNeedsDisplay() } }
+
+    /// Largest circle radius in point.
     public var maxCircleRadius: CGFloat = 6.0 { didSet { setNeedsDisplay() } }
+
+    /// Padding between circles in point.
     public var innerPadding: CGFloat = 2 { didSet { setNeedsDisplay() } }
+
+    /**
+     Degree by which each row of circles is shifted.
+     A value of 0 results in a straight layout of the inner circles.
+     A value other than 0 results in a slightly shifted, fractal-ish / flower-ish look.
+    */
     public var shiftDegree: CGFloat = 40 { didSet { setNeedsDisplay() } }
+
+    /// Overall density of inner circles.
     public var density: CGFloat = 0.8 { didSet { setNeedsDisplay() } }
 
     private let normalizedRadius: CGFloat = 1.0

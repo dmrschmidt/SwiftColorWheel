@@ -6,6 +6,12 @@ enum RotationDirection: CGFloat {
     case counterClockwise = -1
 }
 
+/**
+ Rotatable color wheel picker.
+ This is a subclass of `ColorWheel`. It adds two `UIGestureRecognizeras` to itself.
+ Those allow one-finger and two-finger circular rotation to adjust the overall
+ brightness of the colors.
+ */
 public class RotatingColorWheel: ColorWheel, CAAnimationDelegate {
     public private(set) var panRecognizer: UIPanGestureRecognizer!
     public private(set) var rotateRecognizer: UIRotationGestureRecognizer!
