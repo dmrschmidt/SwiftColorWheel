@@ -21,7 +21,7 @@ You may also find the following iOS controls written in Swift interesting:
 Simply add the following to your Cartfile and run `carthage update`:
 
 ```
-github "dmrschmidt/SwiftColorWheel", ~> 1.0.0
+github "dmrschmidt/SwiftColorWheel", ~> 1.0.1
 ```
 
 # Usage
@@ -80,5 +80,16 @@ colorWheel.shiftDegree = 0
 // Overall density of inner circles.
 colorWheel.density = 1.0
 ```
+
+In some case (like when a `RotatingColorWheel` is placed inside a `UIScrollView`) you may want to tweak the default gesture handling for the rotation. If you do so, you can get access to the original gesture handler and use it in composition.
+
+```swift
+let originalHandler = rotatingWheel.panRecognizer.delegate
+yourRetainedHandler = YourTweakedHandler(complementing: originalHandler)
+rotatingWheel.panRecognizer.delegate = yourRetainedHandler
+rotatingWheel.rotateRecognizer.delegate = yourRetainedHandler
+```
+
+`YourTweakedHandler` could then implement `gestureRecognizerShouldBegin(_:)` in conjunction with the originally provided handler.
 
 <img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_3.png" alt="Screenshot" width="250">
