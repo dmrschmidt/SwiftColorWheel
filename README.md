@@ -1,6 +1,10 @@
 # SwiftColorWheel
-A fancy color wheel for iOS in Swift
 
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
+A beautiful, customizable color wheel for iOS in Swift.
+
+<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_1.png" alt="Screenshot" width="150"><img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_2.png" alt="Screenshot" width="150">
 
 # More related iOS Controls
 
@@ -10,4 +14,82 @@ You may also find the following iOS controls written in Swift interesting:
 * [QRCode](https://github.com/dmrschmidt/QRCode) - a customizable QR code generator
 
 
-## Installation
+# Installation
+
+## Carthage
+
+Simply add the following to your Cartfile and run `carthage update`:
+
+```
+github "dmrschmidt/SwiftColorWheel", ~> 1.0.1
+```
+
+# Usage
+
+Either, add a `ColorWheel` or `RotatingColorWheel` as a custom `UIView` subclass to your interface builder. Alternatively, you can of course simply add it programmatically as a subview to any normal `UIView`.
+
+This will already render your color picker. However it doesn't react on your taps yet. For that, set yourself as it's `delegate`. See the very simplified code example below:
+
+```swift
+class MyViewController: UIViewController, ColorWheelDelegate {
+    private var colorWheel: ColorWheel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        colorWheel = ColorWheel(frame: view.frame)
+        colorWheel.delegate = self
+        view.addSubview(colorWheel)
+    }
+    
+    // MARK: - ColorWheelDelegate
+    
+    func didSelect(color: UIColor) {
+        view.backgroundColor = color
+    }
+}
+```
+
+# Customization
+
+You can modify the look of the color wheel through various exposed properties.
+
+```swift
+// Extra padding in points to the view border.
+colorWheel.padding = 13.0
+
+// Radius in point of the central color circle (for black & white shades).
+colorWheel.centerRadius = 5.0
+
+// Smallest circle radius in point.
+colorWheel.minCircleRadius = 1.0
+
+// Largest circle radius in point.
+colorWheel.maxCircleRadius = 5.0
+
+// Padding between circles in point.
+colorWheel.innerPadding = 3
+
+/**
+ Degree by which each row of circles is shifted.
+ A value of 0 results in a straight layout of the inner circles.
+ A value other than 0 results in a slightly shifted, fractal-ish / flower-ish look.
+*/
+colorWheel.shiftDegree = 0
+
+// Overall density of inner circles.
+colorWheel.density = 1.0
+```
+
+In some case (like when a `RotatingColorWheel` is placed inside a `UIScrollView`) you may want to tweak the default gesture handling for the rotation. If you do so, you can get access to the original gesture handler and use it in composition.
+
+```swift
+let originalHandler = rotatingWheel.panRecognizer.delegate
+yourRetainedHandler = YourTweakedHandler(complementing: originalHandler)
+rotatingWheel.panRecognizer.delegate = yourRetainedHandler
+rotatingWheel.rotateRecognizer.delegate = yourRetainedHandler
+```
+
+`YourTweakedHandler` could then implement `gestureRecognizerShouldBegin(_:)` in conjunction with the originally provided handler.
+
+<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_3.png" alt="Screenshot" width="250">
