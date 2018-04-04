@@ -38,6 +38,11 @@ public class ColorWheel: UIView {
     /// Padding between circles in point.
     public var innerPadding: CGFloat = 2 { didSet { setNeedsDisplay() } }
 
+    /// Outer Radius of the ColorWheel in point.
+    public var radius: CGFloat {
+        return wheelLayer.radius(in: bounds)
+    }
+
     /**
      Degree by which each row of circles is shifted.
      A value of 0 results in a straight layout of the inner circles.
@@ -103,9 +108,15 @@ public class ColorWheel: UIView {
         return super.action(for: layer, forKey: event)
     }
 
+    /**
+     Distance from given point to center, normalized to the ColorWheel radius.
+        0: directly on center
+        1: directly on radius
+     `to` is assumed to be in ColorWheel coordinates.
+    */
     public func normalizedDistanceFromCenter(to touchPoint: CGPoint) -> CGFloat {
         let distance = sqrt(pow(touchPoint.x - wheelCenter.x, 2) + pow(touchPoint.y - wheelCenter.y, 2))
-        return distance / wheelLayer.radius(in: bounds)
+        return distance / radius
     }
 
     @objc func didRegisterTap(recognizer: UITapGestureRecognizer) {

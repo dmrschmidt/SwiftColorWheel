@@ -16,6 +16,8 @@ public class RotatingColorWheel: ColorWheel, CAAnimationDelegate {
     public private(set) var panRecognizer: UIPanGestureRecognizer!
     public private(set) var rotateRecognizer: UIRotationGestureRecognizer!
 
+    private let defaultGestureHandler: DefaultWheelGestureHandler
+
     private var rotationArch: CGFloat = 2 * .pi
     private var lastDirection: RotationDirection = .none
     private var lastAngle: CGFloat = 2 * .pi
@@ -26,11 +28,13 @@ public class RotatingColorWheel: ColorWheel, CAAnimationDelegate {
     private let rotationAnimationDuration = 0.5
 
     public required init?(coder aDecoder: NSCoder) {
+        defaultGestureHandler = DefaultWheelGestureHandler()
         super.init(coder: aDecoder)
         prepareRotationRecognizers()
     }
 
     public override init(frame: CGRect) {
+        defaultGestureHandler = DefaultWheelGestureHandler()
         super.init(frame: frame)
         prepareRotationRecognizers()
     }
@@ -147,8 +151,11 @@ public class RotatingColorWheel: ColorWheel, CAAnimationDelegate {
     }
 
     private func prepareRotationRecognizers() {
+        defaultGestureHandler.colorWheel = self
         rotateRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(didRotate(recognizer:)))
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan(recognizer:)))
+        rotateRecognizer.delegate = defaultGestureHandler
+        panRecognizer.delegate = defaultGestureHandler
         addGestureRecognizer(rotateRecognizer)
         addGestureRecognizer(panRecognizer)
     }

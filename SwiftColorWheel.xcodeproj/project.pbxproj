@@ -19,6 +19,7 @@
 		C32C9B412074358100EE5634 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C32C9B402074358100EE5634 /* Assets.xcassets */; };
 		C32C9B442074358100EE5634 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C32C9B422074358100EE5634 /* LaunchScreen.storyboard */; };
 		C32C9B4D2074374C00EE5634 /* SwiftColorWheel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C32C9B13207433F500EE5634 /* SwiftColorWheel.framework */; };
+		C348710020752186007B57E3 /* DefaultWheelGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34870FF20752186007B57E3 /* DefaultWheelGestureHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		C32C9B402074358100EE5634 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C32C9B432074358100EE5634 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C32C9B452074358100EE5634 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C34870FF20752186007B57E3 /* DefaultWheelGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultWheelGestureHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				C32C9B2E2074356000EE5634 /* RotatingColorWheel.swift */,
 				C32C9B16207433F500EE5634 /* SwiftColorWheel.h */,
 				C32C9B17207433F500EE5634 /* Info.plist */,
+				C34870FF20752186007B57E3 /* DefaultWheelGestureHandler.swift */,
 			);
 			path = SwiftColorWheel;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C348710020752186007B57E3 /* DefaultWheelGestureHandler.swift in Sources */,
 				C32C9B302074356100EE5634 /* ColorWheel.swift in Sources */,
 				C32C9B312074356100EE5634 /* RotatingColorWheel.swift in Sources */,
 				C32C9B322074356100EE5634 /* ColorWheelLayer.swift in Sources */,
