@@ -92,4 +92,12 @@ rotatingWheel.rotateRecognizer.delegate = yourRetainedHandler
 
 `YourTweakedHandler` could then implement `gestureRecognizerShouldBegin(_:)` in conjunction with the originally provided handler.
 
-<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_3.png" alt="Screenshot" width="250">
+## See it live in action
+
+SoundCard lets you send postcards with audio messages.
+
+SwiftColorWheel is used to color the waveform derived from the audio message on postcards sent by [SoundCard](https://www.soundcard.io).
+
+Check it out on the [App Store](http://bit.ly/soundcardio).
+
+<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_4.png" alt="Screenshot">
