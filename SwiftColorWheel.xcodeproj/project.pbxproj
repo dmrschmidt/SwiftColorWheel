@@ -57,6 +57,12 @@
 		C32C9B432074358100EE5634 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C32C9B452074358100EE5634 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C34870FF20752186007B57E3 /* DefaultWheelGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultWheelGestureHandler.swift; sourceTree = "<group>"; };
+		E1BD5F7C2133B39600B63F62 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E1BD5F7D2133B39600B63F62 /* screenshot_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_3.png; sourceTree = "<group>"; };
+		E1BD5F7E2133B39600B63F62 /* screenshot_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_4.png; sourceTree = "<group>"; };
+		E1BD5F7F2133B39600B63F62 /* screenshot_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_1.png; sourceTree = "<group>"; };
+		E1BD5F802133B39700B63F62 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E1BD5F812133B39700B63F62 /* screenshot_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +95,12 @@
 		C32C9B09207433F500EE5634 = {
 			isa = PBXGroup;
 			children = (
+				E1BD5F802133B39700B63F62 /* LICENSE */,
+				E1BD5F7C2133B39600B63F62 /* README.md */,
+				E1BD5F7F2133B39600B63F62 /* screenshot_1.png */,
+				E1BD5F812133B39700B63F62 /* screenshot_2.png */,
+				E1BD5F7D2133B39600B63F62 /* screenshot_3.png */,
+				E1BD5F7E2133B39600B63F62 /* screenshot_4.png */,
 				C32C9B15207433F500EE5634 /* SwiftColorWheel */,
 				C32C9B20207433F500EE5634 /* SwiftColorWheelTests */,
 				C32C9B382074357F00EE5634 /* SwiftColorWheelExamples */,
@@ -112,10 +124,10 @@
 			children = (
 				C32C9B2D2074356000EE5634 /* ColorWheel.swift */,
 				C32C9B2F2074356100EE5634 /* ColorWheelLayer.swift */,
+				C34870FF20752186007B57E3 /* DefaultWheelGestureHandler.swift */,
+				C32C9B17207433F500EE5634 /* Info.plist */,
 				C32C9B2E2074356000EE5634 /* RotatingColorWheel.swift */,
 				C32C9B16207433F500EE5634 /* SwiftColorWheel.h */,
-				C32C9B17207433F500EE5634 /* Info.plist */,
-				C34870FF20752186007B57E3 /* DefaultWheelGestureHandler.swift */,
 			);
 			path = SwiftColorWheel;
 			sourceTree = "<group>";
@@ -123,8 +135,8 @@
 		C32C9B20207433F500EE5634 /* SwiftColorWheelTests */ = {
 			isa = PBXGroup;
 			children = (
-				C32C9B21207433F500EE5634 /* SwiftColorWheelTests.swift */,
 				C32C9B23207433F500EE5634 /* Info.plist */,
+				C32C9B21207433F500EE5634 /* SwiftColorWheelTests.swift */,
 			);
 			path = SwiftColorWheelTests;
 			sourceTree = "<group>";
@@ -133,11 +145,11 @@
 			isa = PBXGroup;
 			children = (
 				C32C9B392074357F00EE5634 /* AppDelegate.swift */,
-				C32C9B3B2074357F00EE5634 /* ViewController.swift */,
-				C32C9B3D2074357F00EE5634 /* Main.storyboard */,
 				C32C9B402074358100EE5634 /* Assets.xcassets */,
-				C32C9B422074358100EE5634 /* LaunchScreen.storyboard */,
 				C32C9B452074358100EE5634 /* Info.plist */,
+				C32C9B422074358100EE5634 /* LaunchScreen.storyboard */,
+				C32C9B3D2074357F00EE5634 /* Main.storyboard */,
+				C32C9B3B2074357F00EE5634 /* ViewController.swift */,
 			);
 			path = SwiftColorWheelExamples;
 			sourceTree = "<group>";
