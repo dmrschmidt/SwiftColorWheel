@@ -21,7 +21,7 @@ You may also find the following iOS controls written in Swift interesting:
 Simply add the following to your Cartfile and run `carthage update`:
 
 ```
-github "dmrschmidt/SwiftColorWheel", ~> 1.0.1
+github "dmrschmidt/SwiftColorWheel", ~> 1.2
 ```
 
 # Usage
