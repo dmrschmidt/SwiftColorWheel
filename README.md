@@ -4,7 +4,8 @@
 
 A beautiful, customizable color wheel for iOS in Swift.
 
-<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_1.png" alt="Screenshot" width="150"><img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_2.png" alt="Screenshot" width="150">
+<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_1.png" alt="Screenshot" width="150"><img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/rotatingcolorwheel.gif" alt="Rotating Screenshot" width="150"><img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/master/screenshot_2.png" alt="Screenshot" width="150">
+
 
 # More related iOS Controls
 
