@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42016CA4214B995E009CAA6C /* SwiftColorWheel.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = C32C9B13207433F500EE5634 /* SwiftColorWheel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C32C9B1D207433F500EE5634 /* SwiftColorWheel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C32C9B13207433F500EE5634 /* SwiftColorWheel.framework */; };
 		C32C9B22207433F500EE5634 /* SwiftColorWheelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32C9B21207433F500EE5634 /* SwiftColorWheelTests.swift */; };
 		C32C9B24207433F500EE5634 /* SwiftColorWheel.h in Headers */ = {isa = PBXBuildFile; fileRef = C32C9B16207433F500EE5634 /* SwiftColorWheel.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +39,20 @@
 			remoteInfo = SwiftColorWheel;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		42016CA3214B9954009CAA6C /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				42016CA4214B995E009CAA6C /* SwiftColorWheel.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C32C9B13207433F500EE5634 /* SwiftColorWheel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftColorWheel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,6 +221,7 @@
 				C32C9B332074357F00EE5634 /* Sources */,
 				C32C9B342074357F00EE5634 /* Frameworks */,
 				C32C9B352074357F00EE5634 /* Resources */,
+				42016CA3214B9954009CAA6C /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,13 +245,14 @@
 				TargetAttributes = {
 					C32C9B12207433F500EE5634 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1000;
 					};
 					C32C9B1B207433F500EE5634 = {
 						CreatedOnToolsVersion = 9.3;
 					};
 					C32C9B362074357F00EE5634 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -492,7 +509,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -518,7 +535,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.soundcard.SwiftColorWheel;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -564,6 +581,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AR4667766V;
 				INFOPLIST_FILE = SwiftColorWheelExamples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -571,7 +589,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.soundcard.SwiftColorWheelExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -581,6 +599,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = AR4667766V;
 				INFOPLIST_FILE = SwiftColorWheelExamples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -588,7 +607,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.soundcard.SwiftColorWheelExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
