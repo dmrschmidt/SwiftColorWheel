@@ -23,7 +23,7 @@ Also [check it out on CocoaControls](https://www.cocoacontrols.com/controls/swif
 Simply add the following to your Cartfile and run `carthage update`:
 
 ```
-github "dmrschmidt/SwiftColorWheel", ~> 1.2
+github "dmrschmidt/SwiftColorWheel", ~> 1.3
 ```
 
 # Usage
