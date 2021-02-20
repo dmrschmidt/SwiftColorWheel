@@ -27,7 +27,7 @@ Just add `https://github.com/dmrschmidt/SwiftColorWheel` and set "Up to Next Maj
 Simply add the following to your Cartfile and run `carthage update`:
 
 ```
-github "dmrschmidt/SwiftColorWheel", ~> 1.3
+github "dmrschmidt/SwiftColorWheel", ~> 1.4
 ```
 
 # Usage
