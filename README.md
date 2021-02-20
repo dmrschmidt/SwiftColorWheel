@@ -18,6 +18,10 @@ Also [check it out on CocoaControls](https://www.cocoacontrols.com/controls/swif
 
 # Installation
 
+## Swift Package Manager
+
+Just add `https://github.com/dmrschmidt/SwiftColorWheel` and set "Up to Next Major" to "1.4.0":
+
 ## Carthage
 
 Simply add the following to your Cartfile and run `carthage update`:
