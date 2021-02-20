@@ -27,7 +27,7 @@ Just add `https://github.com/dmrschmidt/SwiftColorWheel` and select "Up to Next 
 Simply add the following to your Cartfile and run `carthage update`:
 
 ```
-github "dmrschmidt/SwiftColorWheel", ~> 1.4
+github "dmrschmidt/SwiftColorWheel", ~> 1.5
 ```
 
 # Usage
