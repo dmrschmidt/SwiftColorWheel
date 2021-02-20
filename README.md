@@ -20,7 +20,7 @@ Also [check it out on CocoaControls](https://www.cocoacontrols.com/controls/swif
 
 ## Swift Package Manager
 
-Just add `https://github.com/dmrschmidt/SwiftColorWheel` and set "Up to Next Major" to "1.4.0":
+Just add `https://github.com/dmrschmidt/SwiftColorWheel` and select "Up to Next Major"
 
 ## Carthage
 
