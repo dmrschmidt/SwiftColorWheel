@@ -17,6 +17,8 @@ class DefaultWheelGestureHandler: NSObject, UIGestureRecognizerDelegate {
     private func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) -> Bool {
         guard let colorWheel = colorWheel else { return true }
 
+        colorWheel.removeHighlightCircle()
+
         // since the view is rotated, the coordinates are also "rotated"
         let rotatedTouchPoint = gestureRecognizer.location(in: colorWheel)
         let distance = colorWheel.normalizedDistanceFromCenter(to: rotatedTouchPoint)
@@ -27,6 +29,8 @@ class DefaultWheelGestureHandler: NSObject, UIGestureRecognizerDelegate {
 
     private func handleRotateGesture(_ gestureRecognizer: UIRotationGestureRecognizer) -> Bool {
         guard let colorWheel = colorWheel else { return true }
+
+        colorWheel.removeHighlightCircle()
 
         // since the view is rotated, the coordinates are also "rotated"
         let rotatedTouchPointA = gestureRecognizer.location(ofTouch: 0, in: colorWheel)

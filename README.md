@@ -39,7 +39,7 @@ This will already render your color picker. However it doesn't react on your tap
 ```swift
 class MyViewController: UIViewController, ColorWheelDelegate {
     private var colorWheel: ColorWheel!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,9 +47,9 @@ class MyViewController: UIViewController, ColorWheelDelegate {
         colorWheel.delegate = self
         view.addSubview(colorWheel)
     }
-    
+
     // MARK: - ColorWheelDelegate
-    
+
     func didSelect(color: UIColor) {
         view.backgroundColor = color
     }
@@ -85,6 +85,10 @@ colorWheel.shiftDegree = 0
 
 // Overall density of inner circles.
 colorWheel.density = 1.0
+
+// Stroke color highlighting currently selected color. Set nil to disable highlighting.
+// Default is UIColor.white.
+colorWheel.highlightStrokeColor = nil
 ```
 
 In some case (like when a `RotatingColorWheel` is placed inside a `UIScrollView`) you may want to tweak the default gesture handling for the rotation. If you do so, you can get access to the original gesture handler and use it in composition.

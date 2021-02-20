@@ -38,6 +38,9 @@ public class ColorWheel: UIView {
     /// Padding between circles in point.
     public var innerPadding: CGFloat = 2 { didSet { setNeedsDisplay() } }
 
+    /// Stroke color highlighting currently selected color. Set nil to disable highlighting.
+    public var highlightStrokeColor: UIColor? = UIColor.white { didSet { setNeedsDisplay() } }
+
     /// Outer Radius of the ColorWheel in point.
     public var radius: CGFloat {
         return wheelLayer.radius(in: bounds)
@@ -125,8 +128,13 @@ public class ColorWheel: UIView {
         guard distance <= normalizedRadius else { return }
 
         let angle = adjustedAngleTo(center: wheelCenter, pointOnCircle: touchPoint, distance: distance)
-        let tappedColor = wheelLayer.color(at: angle, distance: distance)
+        let tappedColor = wheelLayer.color(at: angle, shiftedBy: shiftDegree, distance: distance)
+        wheelLayer.lastTouchPoint = touchPoint
         delegate?.didSelect(color: tappedColor)
+    }
+
+    func removeHighlightCircle() {
+        wheelLayer.lastTouchPoint = nil
     }
 
     func angleTo(center: CGPoint, pointOnCircle: CGPoint) -> CGFloat {

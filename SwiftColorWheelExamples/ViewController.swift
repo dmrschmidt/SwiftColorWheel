@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         standardWheel.innerPadding = 3
         standardWheel.shiftDegree = 0
         standardWheel.density = 1.0
+        standardWheel.highlightStrokeColor = nil
     }
 }
 

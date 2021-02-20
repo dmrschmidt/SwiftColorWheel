@@ -3,6 +3,12 @@ import UIKit
 class ColorWheelLayer: CALayer {
     @NSManaged var brightness: CGFloat
 
+    var lastTouchPoint: CGPoint? {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+
     // swiftlint:disable force_cast
     private var padding: CGFloat { return (delegate as! ColorWheel).padding }
     private var centerRadius: CGFloat { return (delegate as! ColorWheel).centerRadius }
@@ -11,6 +17,7 @@ class ColorWheelLayer: CALayer {
     private var innerPadding: CGFloat { return (delegate as! ColorWheel).innerPadding }
     private var shiftDegree: CGFloat { return (delegate as! ColorWheel).shiftDegree }
     private var density: CGFloat { return (delegate as! ColorWheel).density }
+    private var highlightStrokeColor: UIColor? { return (delegate as! ColorWheel).highlightStrokeColor }
     // swiftlint:enable force_cast
 
     private let defaultBrightness: CGFloat = 1.0
@@ -51,13 +58,15 @@ class ColorWheelLayer: CALayer {
             currentDotRadius = dotRadius(distance: distance)
 
             arcPositions(dotRadius: currentDotRadius, on: innerRadius).forEach { rad in
-                drawCircle(around: center, on: outerRadius, of: context, rad: rad, distance: distance)
+                drawPickerCircle(in: context, around: center, on: outerRadius, rad: rad, distance: distance)
             }
             innerRadius -= (prevDotRadius + 2 * currentDotRadius + innerPadding)
             prevDotRadius = currentDotRadius
         } while innerRadius > 2 * centerRadius + currentDotRadius
 
-        drawCircle(around: center, on: outerRadius, of: context, rad: 0, distance: 0)
+        drawPickerCircle(in: context, around: center, on: outerRadius, rad: 0, distance: 0)
+        drawHighlightCircle(in: context, around: center, on: outerRadius)
+
         UIGraphicsPopContext()
     }
 
@@ -65,8 +74,9 @@ class ColorWheelLayer: CALayer {
         return min(rect.size.width, rect.size.height) / 2 - padding
     }
 
-    func color(at rad: CGFloat, distance: CGFloat) -> UIColor {
-        return UIColor(hue: rad / (2 * .pi), saturation: distance, brightness: brightness, alpha: 1)
+    func color(at rad: CGFloat, shiftedBy shiftDegree: CGFloat, distance: CGFloat) -> UIColor {
+        let shiftedRad = rad + (shiftDegree * distance) / 180 * .pi
+        return UIColor(hue: shiftedRad / (2 * .pi), saturation: distance, brightness: brightness, alpha: 1)
     }
 }
 
@@ -79,19 +89,42 @@ fileprivate extension ColorWheelLayer {
         return (0..<circlesFitting).map { CGFloat($0) * stepSize }
     }
 
-    func drawCircle(around center: CGPoint, on outerRadius: CGFloat, of context: CGContext, rad: CGFloat, distance: CGFloat) {
+    func drawPickerCircle(in context: CGContext, around center: CGPoint, on outerRadius: CGFloat, rad: CGFloat, distance: CGFloat) {
         let circleRadius = dotRadius(distance: distance)
-        let center = position(around: center, on: outerRadius, rad: rad, distance: distance)
-        let circleColor = color(at: rad, distance: distance)
-        let circleRect = CGRect(x: center.x - circleRadius,
-                y: center.y - circleRadius,
-                width: circleRadius * 2,
-                height: circleRadius * 2)
-        context.setLineWidth(circleRadius)
-        context.setStrokeColor(circleColor.cgColor)
-        context.setFillColor(circleColor.cgColor)
+        let center = position(around: center, shiftedBy: shiftDegree, on: outerRadius, rad: rad, distance: distance)
+        let circleColor = color(at: rad, shiftedBy: shiftDegree, distance: distance)
+        let rect = circleRect(center: center, radius: circleRadius, modifier: 2)
+
+        drawCircle(in: context, inside: rect, lineWidth: circleRadius, color: circleColor, strokeColor: circleColor)
+    }
+
+    func drawHighlightCircle(in context: CGContext, around center: CGPoint, on outerRadius: CGFloat) {
+        guard let touchPoint = lastTouchPoint, let strokeColor = highlightStrokeColor else {
+            return
+        }
+
+        let distance = sqrt(pow(touchPoint.x - center.x, 2) + pow(touchPoint.y - center.y, 2))
+        let normDistance = distance / (radius(in: bounds) - padding)
+        let rad = -(atan2(center.y - touchPoint.y, center.x - touchPoint.x) - CGFloat.pi)
+        let circleColor = color(at: rad, shiftedBy: 0, distance: normDistance)
+        let circleRadius = dotRadius(distance: normDistance)
+        let lineWidth = circleRadius * 0.7
+        let newCenter = position(around: center, shiftedBy: 0, on: outerRadius, rad: rad, distance: normDistance)
+        let rect = circleRect(center: newCenter, radius: circleRadius, modifier: 3.6)
+
+        drawCircle(in: context, inside: rect, lineWidth: lineWidth, color: circleColor, strokeColor: strokeColor)
+    }
+
+    func drawCircle(in context: CGContext, inside circleRect: CGRect, lineWidth: CGFloat, color: UIColor, strokeColor: UIColor) {
+        context.setLineWidth(lineWidth)
+        context.setStrokeColor(strokeColor.cgColor)
+        context.setFillColor(color.cgColor)
         context.addEllipse(in: circleRect)
         context.drawPath(using: .fillStroke)
+    }
+
+    func circleRect(center: CGPoint, radius: CGFloat, modifier: CGFloat) -> CGRect {
+        CGRect(x: center.x - radius, y: center.y - radius, width: radius * modifier, height: radius * modifier)
     }
 
     func dotRadius(distance: CGFloat) -> CGFloat {
@@ -99,7 +132,7 @@ fileprivate extension ColorWheelLayer {
         return max(minCircleRadius, maxCircleRadius * distance)
     }
 
-    func position(around center: CGPoint, on radius: CGFloat, rad: CGFloat, distance: CGFloat) -> CGPoint {
+    func position(around center: CGPoint, shiftedBy shiftDegree: CGFloat, on radius: CGFloat, rad: CGFloat, distance: CGFloat) -> CGPoint {
         let shiftedRad = rad + (shiftDegree * distance) / 180 * .pi
         let x = center.x + (radius - padding) * distance * cos(-shiftedRad)
         let y = center.y + (radius - padding) * distance * sin(-shiftedRad)
