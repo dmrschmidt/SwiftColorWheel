@@ -116,7 +116,7 @@ rotatingWheel.rotateRecognizer.delegate = yourRetainedHandler
 
 [SoundCard](https://www.soundcard.io) lets you send real, physical postcards with audio messages. Right from your iOS device.
 
-DSWaveformImage is used to draw the waveforms of the audio messages that get printed on the postcards sent by [SoundCard](https://www.soundcard.io).
+SwiftColorWheel is used to color the waveform derived from the audio message on postcards sent by [SoundCard](https://www.soundcard.io).
 
 &nbsp;
 
