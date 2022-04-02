@@ -17,6 +17,15 @@ You may also find the following iOS controls written in Swift interesting:
 
 Also [check it out on CocoaControls](https://www.cocoacontrols.com/controls/swiftcolorwheel).
 
+If you really like this library (aka Sponsoring)
+------------
+I'm doing all this for fun and joy and because I strongly believe in the power of open source. On the off-chance though, that using my library has brought joy to you and you just feel like saying "thank you", I would smile like a 4-year old getting a huge ice cream cone, if you'd support my via one of the sponsoring buttons ☺️💕
+
+If you're feeling in the mood of sending someone else a lovely gesture of appreciation, maybe check out my iOS app [💌 SoundCard](https://www.soundcard.io) to send them a real postcard with a personal audio message.
+
+<a href="https://www.buymeacoffee.com/dmrschmidt" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
+
 # Installation
 
 ## Swift Package Manager
@@ -105,10 +114,22 @@ rotatingWheel.rotateRecognizer.delegate = yourRetainedHandler
 
 ## See it live in action
 
-SoundCard lets you send postcards with audio messages.
+[SoundCard](https://www.soundcard.io) lets you send real, physical postcards with audio messages. Right from your iOS device.
 
-SwiftColorWheel is used to color the waveform derived from the audio message on postcards sent by [SoundCard](https://www.soundcard.io).
+DSWaveformImage is used to draw the waveforms of the audio messages that get printed on the postcards sent by [SoundCard](https://www.soundcard.io).
 
-Check it out on the [App Store](http://bit.ly/soundcardio).
+&nbsp;
 
-<img src="https://github.com/dmrschmidt/SwiftColorWheel/blob/main/screenshot_4.png" alt="Screenshot">
+<div align="center">
+    <a href="http://bit.ly/soundcardio">
+        <img src="https://github.com/dmrschmidt/DSWaveformImage/blob/main/appstore.svg" alt="Download SoundCard">
+        
+Download SoundCard on the App Store.
+    </a>
+</div>
+
+&nbsp;
+
+<a href="http://bit.ly/soundcardio">
+<img src="https://github.com/dmrschmidt/DSWaveformImage/blob/main/screenshot3.png" alt="Screenshot">
+</a>
