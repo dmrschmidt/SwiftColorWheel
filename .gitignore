@@ -70,3 +70,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
+
+# Example app build output
+Example/build/
+.build/
+.swiftpm/
