@@ -10,5 +10,6 @@ let package = Package(
     ],
     targets: [
         .target(name: "SwiftColorWheel"),
+        .testTarget(name: "SwiftColorWheelTests", dependencies: ["SwiftColorWheel"]),
     ]
 )
